@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>공지사항</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/css/notice.css">
+</head>
+
+<body>
+<div class="topnav">
+    <a href="/login">Login</a>
+    <a href="/index">Home</a>
+    <div class="search-container">
+        <form action="#">
+            <input type="text" placeholder="Search.." name="search">
+            <button type="submit"><img id="searchicon" src="/img/search.png" alt=""><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+
+
+</div>
+
+<div class="navbar">
+    <div class="logo">
+        <a href="/index"><img src="/img/logo.jpg"></a>
+    </div>
+
+    <div id="menu">
+        <ul>
+            <li><a href="/notice">공지사항</a>
+            </li>
+            <li><a href="/board">자유게시판</a>
+
+            </li>
+            <li><a href="#">가입</a>
+                <ul>
+                    <li><a href="#">충주캠퍼스</a></li>
+                    <li><a href="#">의왕캠퍼스</a></li>
+                    <li><a href="#">증평캠퍼스</a></li>
+                </ul>
+            </li>
+            <li><a href="#">소개</a>
+                <ul>
+                    <li><a href="#">동아리란?</a></li>
+                    <li><a href="#">가입 방법</a></li>
+                </ul>
+            </li>
+            <li><a href="#">행사</a>
+                <ul>
+                    <li><a href="#">동아리 행사</a></li>
+                    <li><a href="#">동아리 페어</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="pathbox">
+    <h2>Pathbox</h2>
+</div>
+
+<div class="row">
+    <div class="column side">
+
+        <ul class="sidemenu">
+            <h2>Menu</h2>
+            <li id="now"><a href="/notice">공지사항</a></li>
+            <li><a href="/board">자유게시판</a></li>
+            <li><a href="#">가입</a></li>
+            <li><a href="#">소개</a></li>
+            <li><a href="#">행사</a></li>
+        </ul>
+    </div>
+    <div class="column middle">
+        <h1><a href="/notice">공지사항</a></h1>
+
+        <form action="/notice/noticeList" method="get">
+            <div class="row">
+                <div class="col-md-8 mb-3">
+                    <select class="custom-select d-block w-100" name="select">
+                        <option th:text="${param.select == 'title'} ? 'selected' : '' " value="title">제z목</option>
+                        <option th:text="${param.select == 'writer'} ? 'selected' : '' " value="writer">작성자</option>
+                    </select>
+                    <input type="text" class="form-control" name="word"
+                           placeholder="" th:value="${param.word}" required>
+                    <input type="submit" value="검색">
+                </div>
+            </div>
+        </form>
+
+        <form action="/notice" method="post">
+            <table>
+                <tr id="tableheader">
+                    <th>번호</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                    <th>조회</th>
+                    <th>파일</th>
+                    <th scope="cols">선택</th>
+                </tr>
+
+                <tbody>
+                    <input type="hidden" name="n" value=${n.num }>
+                    <tr th:each= "n : ${list}">
+                        <td>${n.n}</td>
+                        <td><a href="/VIEW/noticeDetail/noticeDetail?num=${n.num}">${n.title }</a></td>
+                        <td>${n.writer }</td>
+                        <td>${n.date }</td>
+                        <%-- <td>${n.hit }</td> --%>
+                        <td>0</td>
+                        <td>${n.file }</td>
+                        <td><input type="checkbox" name="del_id" value="${n.num}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+
+<div class="indexer margin-top align-right">
+    <h3 class="hidden">현재 페이지</h3>
+    <div>
+        <span class="text-orange text-strong">th:text=${(param.p==null)?1:param.p}/ ${lastNum} </span> pages
+    </div>
+</div>
+
+<div class="margin-top align-center pager">
+
+    <div>
+
+            <a href="?p=${startNum-1}&search=${param.search}&word=${param.word}">이전</a>
+            <span onclick="alert('이전 페이지가 없습니다.');">이전</span>
+
+    </div>
+
+    <ul class="list">
+
+                <li><a href="?p=${startNum+i}&search=${param.search}&word=${param.word}">${startNum+i}</a></li>
+
+    </ul>
+
+    <div>
+
+            <a href="?p=${startNum+5}&search=${param.search}&word=${param.word}">다음</a>
+
+            <span class="btn btn-next" onclick="alert('다음 페이지가 없습니다.');">다음</span>
+
+    </div>
+
+
+        <div>
+            <button class="btn btn-danger btn-lg btn-block" style="float: right;" type="submit">삭제</button>
+        </div>
+        </form>
+        <div>
+            <button class="btn btn-success btn-lg btn-block" onclick="location.href='/VIEW/noticeWrite/noticeWrite.jsp'" style="float: right;" type="submit">글쓰기</button>
+        </div>
+
+
+</div>
+
+<div class="footer">
+    <p>Footer</p>
+</div>
+</body>
+</html>
